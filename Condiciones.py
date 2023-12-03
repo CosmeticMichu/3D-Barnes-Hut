@@ -19,5 +19,5 @@ def generate_conditions(N, M):
 
         m = 0.01*M
 
-        result.append(Particle(m, [x, y, z], [v_x, v_y, v_z]))
+        result.append(Particle(m, [x, y, z], [v_x, v_y, v_z], [0, 0, 0]))
     return result
