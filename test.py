@@ -2,15 +2,18 @@ from Geometry import *
 from Tree import *
 from Physics import Particle
 import matplotlib.pyplot as plt
+import Condiciones as cond
 
 corner = Vector(0.,0.,0.)
 
 # particles
-p1 = Particle (10, [.4,.3,.6], [0,0,0], [0,0,0])
-p2 = Particle (10, [.55,.7,.7], [0,0,0], [0,0,0])
-p3 = Particle (10, [.6,.8,.6], [0,0,0], [0,0,0])
+#p1 = Particle (10, [.4,.3,.6], [0,0,0])
+#p2 = Particle (10, [.55,.7,.7], [0,0,0])
+#p3 = Particle (10, [.6,.8,.6], [0,0,0])
 
-particles = [p1,p2,p3]
+particles = cond.generate_conditions(10, 10.)
+
+print(particles[0])
 
 # build tree
 root = Cuboid(corner, 1., 1., 1.)

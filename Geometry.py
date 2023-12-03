@@ -88,4 +88,4 @@ class Cuboid:
         ax.yaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
         ax.zaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
 
-        ax.add_collection3d(Line3DCollection(verts, linewidths=1, edgecolors=lc))
+        ax.add_collection3d(Line3DCollection(verts, linewidths=1, colors=lc))

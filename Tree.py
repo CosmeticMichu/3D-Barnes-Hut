@@ -18,6 +18,7 @@ class TreeNode:
 
         self.StoredData = []
         self.divided = False # checks if the current node has already been divided
+        self.Center_Mass = 0.
 
     def divide(self):
         '''
@@ -65,6 +66,7 @@ class TreeNode:
         
         if not self.divided and len(self.StoredData) < self.capacity:
             self.StoredData.append(data)
+            self.Center_Mass += 4*np.pi*data.mass/np.sqrt(data.x*data.x+data.y*data.y+data.z*data.z)
             return True
         
         if self.divided:
