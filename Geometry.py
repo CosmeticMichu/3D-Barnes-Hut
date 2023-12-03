@@ -45,7 +45,7 @@ class Cuboid:
                 self.left <= data.y < self.right and
                 self.bottom <= data.z < self.top)
 
-    def draw(self, ax, c = 'g', lw = 1, **kwargs):
+    def draw(self, ax, show_axis = False, lc = 'g', fc = 'k', lw = 1, **kwargs):
 
         # creates an array with the coordinates of each vertex
         p = np.array([[self.back, self.left, self.bottom], # 0
@@ -71,17 +71,21 @@ class Cuboid:
         ax.view_init(azim=45)
         # ax.invert_xaxis()
 
-        ax.set_facecolor('k')
+        ax.set_facecolor(fc)
         # ax.xaxis.label.set_color('w')
         # ax.yaxis.label.set_color('w')
         # ax.zaxis.label.set_color('w')
-        # ax.tick_params(axis='x', colors='w')
-        # ax.tick_params(axis='y', colors='w')
-        # ax.tick_params(axis='z', colors='w')
-        ax.axis('off')
+
+        if show_axis == True:
+            ax.tick_params(axis='x', colors='w')
+            ax.tick_params(axis='y', colors='w')
+            ax.tick_params(axis='z', colors='w')
+        
+        else:
+            ax.axis('off')
 
         ax.xaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
         ax.yaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
         ax.zaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
 
-        ax.add_collection3d(Line3DCollection(verts, linewidths=1, edgecolors=c))
+        ax.add_collection3d(Line3DCollection(verts, linewidths=1, edgecolors=lc))

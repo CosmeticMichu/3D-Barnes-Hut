@@ -20,6 +20,13 @@ class TreeNode:
         self.divided = False # checks if the current node has already been divided
 
     def divide(self):
+        '''
+        divide method divides the current note into eight childs where each child
+        has half of each one the depth, width and height initial dimentions of
+        his father node. This divide method is asociated to the creation on the
+        OctTree acceleracion structure
+        '''
+
         x_corner = self.boundaries.corner.x
         y_corner = self.boundaries.corner.y
         z_corner = self.boundaries.corner.z
@@ -29,21 +36,30 @@ class TreeNode:
         new_height = 0.5 * self.boundaries.height
 
         # childs in back layer
-        nw1 = TreeNode(Cuboid(Vector(x_corner, y_corner, z_corner + new_height), new_width, new_depth, new_height))
-        ne1 = TreeNode(Cuboid(Vector(x_corner, y_corner + new_width, z_corner + new_height), new_width, new_depth, new_height))
-        se1 = TreeNode(Cuboid(Vector(x_corner, y_corner + new_width, z_corner), new_width, new_depth, new_height))
-        sw1 = TreeNode(Cuboid(Vector(x_corner, y_corner, z_corner), new_width, new_depth, new_height))
+        nw1 = TreeNode(Cuboid(Vector(x_corner, y_corner, z_corner + new_height), new_width, new_depth, new_height), self.capacity)
+        ne1 = TreeNode(Cuboid(Vector(x_corner, y_corner + new_width, z_corner + new_height), new_width, new_depth, new_height), self.capacity)
+        se1 = TreeNode(Cuboid(Vector(x_corner, y_corner + new_width, z_corner), new_width, new_depth, new_height), self.capacity)
+        sw1 = TreeNode(Cuboid(Vector(x_corner, y_corner, z_corner), new_width, new_depth, new_height), self.capacity)
 
         # childs in front layer
-        nw2 = TreeNode(Cuboid(Vector(x_corner + new_depth, y_corner, z_corner + new_height), new_width, new_depth, new_height))
-        ne2 = TreeNode(Cuboid(Vector(x_corner + new_depth, y_corner + new_width, z_corner + new_height), new_width, new_depth, new_height))
-        se2 = TreeNode(Cuboid(Vector(x_corner + new_depth, y_corner + new_width, z_corner), new_width, new_depth, new_height))
-        sw2 = TreeNode(Cuboid(Vector(x_corner + new_depth, y_corner, z_corner), new_width, new_depth, new_height))
+        nw2 = TreeNode(Cuboid(Vector(x_corner + new_depth, y_corner, z_corner + new_height), new_width, new_depth, new_height), self.capacity)
+        ne2 = TreeNode(Cuboid(Vector(x_corner + new_depth, y_corner + new_width, z_corner + new_height), new_width, new_depth, new_height), self.capacity)
+        se2 = TreeNode(Cuboid(Vector(x_corner + new_depth, y_corner + new_width, z_corner), new_width, new_depth, new_height), self.capacity)
+        sw2 = TreeNode(Cuboid(Vector(x_corner + new_depth, y_corner, z_corner), new_width, new_depth, new_height), self.capacity)
 
         self.childs = [nw1, ne1, se1, sw1, nw2, ne2, se2, sw2]
         self.divided = True
 
     def insert(self, data):
+        '''
+        Method to properly insert data into the Tree. Given a data, this method
+        seewps the Tree until a child node is found and the data is inserted
+        into it
+        -----------------------------------------------------------------------
+        Argument:
+        -----------------------------------------------------------------------
+        data: data to be inserted into the tree        
+        '''
         if not self.boundaries.ContainsData(data):
             return False
         
@@ -75,3 +91,16 @@ class TreeNode:
         if self.divided:
             for node in self.childs:
                 node.draw(ax, c = c, lw = lw, **kwargs)
+
+    def length(self):
+        '''
+        Implementation of an asociated len() method fot the Tree, this
+        method swweps all the tree nodes countg the number of particles
+        inserted in the tree
+        '''
+        count = len(self.StoredData)
+        if self.divided:
+            for node in self.childs:
+                count += len(node)
+
+        return count
