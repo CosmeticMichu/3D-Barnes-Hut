@@ -18,7 +18,8 @@ class TreeNode:
 
         self.StoredData = []
         self.divided = False # checks if the current node has already been divided
-        self.Center_Mass = 0.
+        self.Mass = 0.
+        self.Center_Mass = [0., 0., 0.]
 
     def divide(self):
         '''
@@ -66,25 +67,43 @@ class TreeNode:
         
         if not self.divided and len(self.StoredData) < self.capacity:
             self.StoredData.append(data)
-            self.Center_Mass += 4*np.pi*data.mass/np.sqrt(data.x*data.x+data.y*data.y+data.z*data.z)
+            self.Mass += data.mass
+            self.Center_Mass = [data.x, data.y, data.z]
             return True
-        
-        if self.divided:
-            for node in self.childs:
-                if node.insert(data):
-                    return True
-                
+
         if not self.divided and len(self.StoredData) >= self.capacity:
+            self.Mass += data.mass
+            x_cm = 0., y_cm = 0., z_cm = 0.
+            
             self.divide()
             self.StoredData.append(data)
 
             for elem in self.StoredData:
                 for node in self.childs:
                     if node.insert(elem):
+                        x_cm += elem.x*elem.mass/self.Mass
+                        y_cm += elem.y*elem.mass/self.Mass
+                        z_cm += elem.z*elem.mass/self.Mass
                         continue
 
+            self.Center_Mass = [x_cm, y_cm, z_cm]
             self.StoredData.clear()
         
+        if self.divided:
+            self.Mass += data.mass
+            x_cm = 0., y_cm = 0., z_cm = 0.
+            for node in self.childs:
+                if node.insert(data):
+                    return True
+
+            for node in self.childs:
+                for body in node.StoreData:
+                    x_cm = body.x*body.mass/self.Mass
+                    y_cm = body.y*body.mass/self.Mass
+                    z_cm = body.z*body.mass/self.Mass
+
+            self.Center_Mass =[x_cm, y_cm, z_cm]
+
         return False
     
     def draw(self, ax, c = 'g', lw = 1, **kwargs):
