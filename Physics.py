@@ -35,9 +35,9 @@ class GravModel:
         self.tf = tf
         self.dt = dt
 
-    def ParticlePartliceInt(particle1, particle2):
-        ODE = np.zeros((2,6))
-        ODE[:,:3] = 
+    # def ParticlePartliceInt(particle1, particle2):
+    #     ODE = np.zeros((2,6))
+    #     ODE[:,:3] = 
 
     def SweepRegion(self):
         data_in_region = []
