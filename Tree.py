@@ -73,7 +73,9 @@ class TreeNode:
 
         if not self.divided and len(self.StoredData) >= self.capacity:
             self.Mass += data.mass
-            x_cm = 0., y_cm = 0., z_cm = 0.
+            x_cm = 0.
+            y_cm = 0.
+            z_cm = 0.
             
             self.divide()
             self.StoredData.append(data)
@@ -91,13 +93,15 @@ class TreeNode:
         
         if self.divided:
             self.Mass += data.mass
-            x_cm = 0., y_cm = 0., z_cm = 0.
+            x_cm = 0.
+            y_cm = 0.
+            z_cm = 0.
             for node in self.childs:
                 if node.insert(data):
                     return True
 
             for node in self.childs:
-                for body in node.StoreData:
+                for body in node.StoredData:
                     x_cm = body.x*body.mass/self.Mass
                     y_cm = body.y*body.mass/self.Mass
                     z_cm = body.z*body.mass/self.Mass
