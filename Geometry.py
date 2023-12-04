@@ -57,8 +57,6 @@ class Cuboid:
                     [self.front, self.left, self.top], # 6
                     [self.front, self.right, self.top] # 7
                     ], dtype=np.float64)
-        
-        # ax.scatter3D(p[:,0], p[:,1], p[:,2])
 
         # defines each of the faces of the cuboid
         verts= [[p[0],p[1],p[2],p[3]],
@@ -69,7 +67,6 @@ class Cuboid:
                 [p[4],p[5],p[0],p[3]]]
         
         ax.view_init(azim=45)
-        # ax.invert_xaxis()
 
         ax.set_facecolor(fc)
         # ax.xaxis.label.set_color('w')
