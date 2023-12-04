@@ -1,4 +1,5 @@
 from auxiliar import *
+import Condiciones as cond
 
 # ==============================================Create Tree===========================================
 dims = [100, 100, 100]
@@ -10,12 +11,10 @@ QuadTree = TreeNode(Root, capacity = 1)
 
 # =============================================Add Particles==========================================
 N = 10
-particles = MakeParticles(N, dims, seed = 12) # random positioned particles
+particles = cond.generate_conditions(N, 10) # random positioned particles
 
 for particle in particles:
     QuadTree.insert(particle)
-
-print(len(particles))
 
 t_i = 0.
 t_f = 10.
@@ -61,9 +60,15 @@ def arranque(particle, Tree, dt):
     y = particle.y + dt*particle.vy
     z = particle.z + dt*particle.vz
 
-    v_x = particle.vx + dt*get_acel(Tree, particle)[0]
-    v_y = particle.vy + dt*get_acel(Tree, particle)[1]
-    v_z = particle.vz + dt*get_acel(Tree, particle)[2]
+    aux = get_acel(Tree, particle)
+
+    v_x = 0.
+    v_y = 0.
+    v_z = 0.
+    if (type(aux).__name__ == 'list'):
+        v_x = particle.vx + dt*aux[0]
+        v_y = particle.vy + dt*aux[1]
+        v_z = particle.vz + dt*aux[2]
 
     return [x, y, z, v_x, v_y, v_z]
 
@@ -85,16 +90,27 @@ for jj in range(n_step - 2):
     ii = 0
     for particle in particles:
         aux = get_acel(QuadTree, particle)
-        x = 2*history_data[jj+1, ii, 1] - history_data[jj, ii, 1] +h*h*aux[0]
-        y = 2*history_data[jj+1, ii, 2] - history_data[jj, ii, 2] +h*h*aux[1]
-        z = 2*history_data[jj+1, ii, 3] - history_data[jj, ii, 3] +h*h*aux[2]
-        v_x = (history_data[jj+1, ii, 1] - history_data[jj, ii, 1])/h + 0.5*h*aux[0]
-        v_y = (history_data[jj+1, ii, 2] - history_data[jj, ii, 2])/h + 0.5*h*aux[1]
-        v_z = (history_data[jj+1, ii, 3] - history_data[jj, ii, 3])/h + 0.5*h*aux[2]
-        history_data[jj+2, ii,:] = [particle.mass, x, y, z, v_x, v_y, v_z]
-        ii += 1
+        if (type(aux).__name__ == 'list'):
+            x = 2*history_data[jj+1, ii, 1] - history_data[jj, ii, 1] +h*h*aux[0]
+            y = 2*history_data[jj+1, ii, 2] - history_data[jj, ii, 2] +h*h*aux[1]
+            z = 2*history_data[jj+1, ii, 3] - history_data[jj, ii, 3] +h*h*aux[2]
+            v_x = (history_data[jj+1, ii, 1] - history_data[jj, ii, 1])/h + 0.5*h*aux[0]
+            v_y = (history_data[jj+1, ii, 2] - history_data[jj, ii, 2])/h + 0.5*h*aux[1]
+            v_z = (history_data[jj+1, ii, 3] - history_data[jj, ii, 3])/h + 0.5*h*aux[2]
+            history_data[jj+2, ii,:] = [particle.mass, x, y, z, v_x, v_y, v_z]
+            ii += 1
 
 
 
+import numpy as np
+import matplotlib.pyplot as plt
+
+fig = plt.figure()
+ax = plt.axes(projection='3d')
+
+for ii in range(N):
+    ax.scatter3D(history_data[0, ii, 1], history_data[0, ii, 2], history_data[0, ii, 3], cmap='Greens')
+
+plt.show()
 # ==================================================Plot==============================================
 #plotTree(QuadTree, particles, dims)
