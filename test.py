@@ -1,6 +1,7 @@
 from Geometry import *
 from Tree import *
 from Physics import Particle
+from auxiliar import *
 import Condiciones as cond
 import matplotlib.pyplot as plt
 
@@ -13,7 +14,8 @@ corner = Vector(0.,0.,0.)
 
 # particles = [p1,p2,p3]
 
-particles = cond.generate_conditions(10,10)
+# particles = cond.generate_conditions(10,10)
+particles = MakeParticles(10, [10.,10.,10.])
 
 # build tree
 root = Cuboid(corner, 10., 10., 10.)

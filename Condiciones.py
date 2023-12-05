@@ -7,8 +7,8 @@ def generate_conditions(N, M):
     result.append(Particle(M, [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]))
     for ii in range(N-1):
         r = random.uniform(1.0, 10.0)
-        x = random.uniform(-r, r)
-        y = random.uniform(-np.sqrt(r*r - x*x), np.sqrt(r*r - x*x))
+        x = random.uniform(0, r)
+        y = random.uniform(0, np.sqrt(r*r - x*x))
 
         z = np.sqrt(r**2 - x*x - y*y)
 
