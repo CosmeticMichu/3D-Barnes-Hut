@@ -39,59 +39,59 @@ class GravModel:
     #     ODE = np.zeros((2,6))
     #     ODE[:,:3] = 
 
-    def SweepRegion(self):
-        data_in_region = []
+    # def SweepRegion(self):
+    #     data_in_region = []
         
-        for data in self.tree.StoredData:
-            data_in_region.append(data)
+    #     for data in self.tree.StoredData:
+    #         data_in_region.append(data)
 
-        if self.tree.divided:
-            for node in self.tree.childs:
-                data_in_region.extend(node.SweepRegion)
+    #     if self.tree.divided:
+    #         for node in self.tree.childs:
+    #             data_in_region.extend(node.SweepRegion)
 
-        return data_in_region
+    #     return data_in_region
     
-    def CenterOfMass(self):
-        '''
-        Center of mass given by all the particles in a node
-        '''
+    # def CenterOfMass(self):
+    #     '''
+    #     Center of mass given by all the particles in a node
+    #     '''
 
-        TotalMass = 0
-        XPonderate = 0
-        YPonderate = 0
-        ZPonderate = 0
+    #     TotalMass = 0
+    #     XPonderate = 0
+    #     YPonderate = 0
+    #     ZPonderate = 0
 
-        sample = self.SweepRegion()
+    #     sample = self.SweepRegion()
 
-        for data in sample:
-            mass = data.mass
+    #     for data in sample:
+    #         mass = data.mass
 
-            TotalMass += mass
-            XPonderate += data.x * mass
-            YPonderate += data.y * mass
-            ZPonderate += data.z * mass
+    #         TotalMass += mass
+    #         XPonderate += data.x * mass
+    #         YPonderate += data.y * mass
+    #         ZPonderate += data.z * mass
 
-        X_cm = XPonderate/TotalMass
-        Y_cm = YPonderate/TotalMass
-        Z_cm = ZPonderate/TotalMass
+    #     X_cm = XPonderate/TotalMass
+    #     Y_cm = YPonderate/TotalMass
+    #     Z_cm = ZPonderate/TotalMass
 
-        return Vector(X_cm, Y_cm, Z_cm), TotalMass
+    #     return Vector(X_cm, Y_cm, Z_cm), TotalMass
     
-    def UpdateForces(self, G = 4*np.pi, theta = 0.5):
-        '''
-        Method to update the forces for a given evolution state of the system
-        ----------------------------------------------------------------------
-        Arguments:
-        ----------------------------------------------------------------------
-        G: Value of the gravitational constant. Default value is 4*pi, which
-        is consistent with a system defined in terms of light years, years and
-        solar masses as basis units
-        theta: MAC (maximum acceptance criterion). This parameter is going to
-        be passed as threshold value to approximate interactions with center
-        if mass
-        '''
+    # def UpdateForces(self, G = 4*np.pi, theta = 0.5):
+    #     '''
+    #     Method to update the forces for a given evolution state of the system
+    #     ----------------------------------------------------------------------
+    #     Arguments:
+    #     ----------------------------------------------------------------------
+    #     G: Value of the gravitational constant. Default value is 4*pi, which
+    #     is consistent with a system defined in terms of light years, years and
+    #     solar masses as basis units
+    #     theta: MAC (maximum acceptance criterion). This parameter is going to
+    #     be passed as threshold value to approximate interactions with center
+    #     if mass
+    #     '''
 
-        sample = self.SweepRegion()
+    #     sample = self.SweepRegion()
 
-        for data in sample:
-            pass
+    #     for data in sample:
+    #         pass
