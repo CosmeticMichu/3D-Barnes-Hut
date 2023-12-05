@@ -2,11 +2,12 @@ from Physics import Particle
 import numpy as np
 import random
 
-def generate_conditions(N, M):
+def generate_conditions(N, M, dim = 10.0, seed = 111):
     result = []
-    result.append(Particle(M, [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]))
-    for ii in range(N-1):
-        r = random.uniform(1.0, 10.0)
+    # result.append(Particle(M, [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]))
+    np.random.seed(seed)
+    for ii in range(N):
+        r = random.uniform(1.0, dim)
         x = random.uniform(0, r)
         y = random.uniform(0, np.sqrt(r*r - x*x))
 
