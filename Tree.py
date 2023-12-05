@@ -78,6 +78,25 @@ class TreeNode:
             self.Center_Mass = self.Center_Mass/self.Mass
 
             return True
+        
+        if self.divided:
+            # self.Mass += data.mass
+            # x_cm = 0.
+            # y_cm = 0.
+            # z_cm = 0.
+            for node in self.childs:
+                # for body in node.StoredData:
+                #     x_cm += body.x*body.mass/self.Mass
+                #     y_cm += body.y*body.mass/self.Mass
+                #     z_cm += body.z*body.mass/self.Mass
+                if node.insert(data):
+                    self.Center_Mass = self.Center_Mass * self.Mass
+                    self.Center_Mass = self.Center_Mass + data.mass * np.array([data.x, data.y, data.z])
+                    self.Mass += data.mass
+                    self.Center_Mass = self.Center_Mass/self.Mass
+                    return True
+
+            # self.Center_Mass =[x_cm, y_cm, z_cm]
 
         if not self.divided and len(self.StoredData) >= self.capacity:
             # self.Mass += data.mass
@@ -111,25 +130,6 @@ class TreeNode:
                 self.Center_Mass = self.Center_Mass/self.Mass
             self.StoredData.clear() # particles are allowed only in a leaf node
         
-        if self.divided:
-            # self.Mass += data.mass
-            # x_cm = 0.
-            # y_cm = 0.
-            # z_cm = 0.
-            for node in self.childs:
-                # for body in node.StoredData:
-                #     x_cm += body.x*body.mass/self.Mass
-                #     y_cm += body.y*body.mass/self.Mass
-                #     z_cm += body.z*body.mass/self.Mass
-                if node.insert(data):
-                    self.Center_Mass = self.Center_Mass * self.Mass
-                    self.Center_Mass = self.Center_Mass + data.mass * np.array([data.x, data.y, data.z])
-                    self.Mass += data.mass
-                    self.Center_Mass = self.Center_Mass/self.Mass
-                    return True
-
-            # self.Center_Mass =[x_cm, y_cm, z_cm]
-
         return False
     
     def draw(self, ax, c = 'g', lw = 1, **kwargs):
