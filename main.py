@@ -10,8 +10,11 @@ Root = Cuboid(corner, dims[0], dims[1], dims[1])
 QuadTree = TreeNode(Root, capacity = 1)
 
 # =============================================Add Particles==========================================
-N = 10
-particles = cond.generate_conditions(N, 10) # random positioned particles
+# N = 10
+N = 2
+# particles = cond.generate_conditions(N, 10) # random positioned particles
+
+particles = [Particle(1., [0.,0.,0.], [0.,0.,0.], [0.,0.,0.]), Particle(3e-6,[1.,0.,0.],[0.,6.27,0.],[0.,0.,0.])]
 
 for particle in particles:
     QuadTree.insert(particle)
@@ -52,6 +55,8 @@ def get_acel(Tree, particle):
             
             return [result_x, result_y, result_z]
         else:
+            return [0., 0., 0.]
+    else:
             return [0., 0., 0.]
 
 
@@ -100,17 +105,41 @@ for jj in range(n_step - 2):
             history_data[jj+2, ii,:] = [particle.mass, x, y, z, v_x, v_y, v_z]
             ii += 1
 
+# print figures
+ii = 0
+system_name = 'earth-sun'
 
-
-import numpy as np
-import matplotlib.pyplot as plt
+img_iter = 10
 
 fig = plt.figure()
-ax = plt.axes(projection='3d')
+fig.suptitle('Evolution of the ' + system_name + ' system')
 
-for ii in range(N):
-    ax.scatter3D(history_data[0, ii, 1], history_data[0, ii, 2], history_data[0, ii, 3], cmap='Greens')
+ax = fig.add_subplot(111, projection='3d')
 
-plt.show()
+xmin, xmax = np.min(history_data[:,:,1]), np.max(history_data[:,:,1])
+ymin, ymax = np.min(history_data[:,:,2]), np.max(history_data[:,:,2])
+
+ax.set_xlim3d(xmin = xmin, xmax = xmax)
+ax.set_ylim3d(ymin = ymin, ymax = ymax)
+
+for jj in range(0,n_step):
+    if jj%img_iter == 0:
+        ax.set_title(str(jj) + 'step')
+        ax.scatter(history_data[jj,:,1], history_data[jj,:,2], history_data[jj,:,3], s=10, c = 'w')
+        # ax.set_zlim3d(zmin = 0, zmax = )
+        plt.savefig('figures/' + str(jj) + '.png')
+
+# print(history_data[10])
+
+# import numpy as np
+# import matplotlib.pyplot as plt
+
+# fig = plt.figure()
+# ax = plt.axes(projection='3d')
+
+# for ii in range(N):
+#     ax.scatter3D(history_data[0, ii, 1], history_data[0, ii, 2], history_data[0, ii, 3], cmap='Greens')
+
+# plt.show()
 # ==================================================Plot==============================================
 #plotTree(QuadTree, particles, dims)

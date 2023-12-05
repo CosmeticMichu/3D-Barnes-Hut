@@ -19,7 +19,7 @@ class TreeNode:
         self.StoredData = []
         self.divided = False # checks if the current node has already been divided
         self.Mass = 0.
-        self.Center_Mass = [0., 0., 0.]
+        self.Center_Mass = np.array([0., 0., 0.])
 
     def divide(self):
         '''
@@ -67,46 +67,68 @@ class TreeNode:
         
         if not self.divided and len(self.StoredData) < self.capacity:
             self.StoredData.append(data)
-            self.Mass += data.mass
-            self.Center_Mass = [data.x, data.y, data.z]
+            
+            self.ResetNode()
+
+            for elem in self.StoredData:
+                # in general, a number N of elements in the node given by the capacity attribute
+                self.Mass += elem.mass
+                self.Center_Mass += elem.mass * np.array([elem.x, elem.y, elem.z])
+
+            self.Center_Mass = self.Center_Mass/self.Mass
+
             return True
 
         if not self.divided and len(self.StoredData) >= self.capacity:
-            self.Mass += data.mass
-            x_cm = 0.
-            y_cm = 0.
-            z_cm = 0.
-            
+            # self.Mass += data.mass
+            # x_cm = 0.
+            # y_cm = 0.
+            # z_cm = 0.
+
             self.divide()
             self.StoredData.append(data)
 
+            self.ResetNode()
+
             for elem in self.StoredData:
                 for node in self.childs:
+                    # if the data is inserted into one of the child nodes, the Mass and Center_Mass
+                    # attributes are updated in the parent node and then continues trying to insert
+                    # the next particle in the parent StoredData array into a child
                     if node.insert(elem):
-                        x_cm += elem.x*elem.mass/self.Mass
-                        y_cm += elem.y*elem.mass/self.Mass
-                        z_cm += elem.z*elem.mass/self.Mass
+                        self.Mass += elem.mass
+                        self.Center_Mass += elem.mass * np.array([elem.x, elem.y, elem.z])
+                        # x_cm += elem.x*elem.mass/self.Mass
+                        # y_cm += elem.y*elem.mass/self.Mass
+                        # z_cm += elem.z*elem.mass/self.Mass
                         continue
 
-            self.Center_Mass = [x_cm, y_cm, z_cm]
-            self.StoredData.clear()
+            # self.Center_Mass = [x_cm, y_cm, z_cm]
+            if self.Mass == 0.:
+                self.Center_Mass = self.Center_Mass
+
+            else:
+                self.Center_Mass = self.Center_Mass/self.Mass
+            self.StoredData.clear() # particles are allowed only in a leaf node
         
         if self.divided:
-            self.Mass += data.mass
-            x_cm = 0.
-            y_cm = 0.
-            z_cm = 0.
+            # self.Mass += data.mass
+            # x_cm = 0.
+            # y_cm = 0.
+            # z_cm = 0.
             for node in self.childs:
+                # for body in node.StoredData:
+                #     x_cm += body.x*body.mass/self.Mass
+                #     y_cm += body.y*body.mass/self.Mass
+                #     z_cm += body.z*body.mass/self.Mass
                 if node.insert(data):
+                    self.Center_Mass = self.Center_Mass * self.Mass
+                    self.Center_Mass = self.Center_Mass + data.mass * np.array([data.x, data.y, data.z])
+                    self.Mass += data.mass
+                    self.Center_Mass = self.Center_Mass/self.Mass
                     return True
 
-            for node in self.childs:
-                for body in node.StoredData:
-                    x_cm = body.x*body.mass/self.Mass
-                    y_cm = body.y*body.mass/self.Mass
-                    z_cm = body.z*body.mass/self.Mass
-
-            self.Center_Mass =[x_cm, y_cm, z_cm]
+            # self.Center_Mass =[x_cm, y_cm, z_cm]
 
         return False
     
@@ -129,3 +151,7 @@ class TreeNode:
                 count += len(node)
 
         return count
+
+    def ResetNode(self):
+        self.Mass = 0.
+        self.Center_Mass = np.array([0., 0., 0.])
